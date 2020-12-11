@@ -80,6 +80,7 @@
 				<tr>
 					<th id="Eid">$tlang.getString("useconrem.useid")</th>
 					<th id="Name">$tlang.getString("useconrem.nam")</th>
+					<th id="School">Escuela</th>
 					<th id="Email">$tlang.getString("useconrem.ema")</th>
 					<th id="Type" class="hidden-xs">$tlang.getString("usecre.typ")</th>
 					<th id="Status" class="hidden-xs">$tlang.getString("usecre.status")</th>
@@ -97,6 +98,7 @@
 		#end
 					</td>
 					<td headers="Name">$formattedText.escapeHtml($user.SortName)</td>
+					<td headers="Name">Escuela</td>
 					<td headers="Email">$formattedText.escapeHtml($user.Email)</td>
 					<td headers="Type" class="hidden-xs">$formattedText.escapeHtml($user.Type)</td>
 					<td headers="Status" class="hidden-xs">#if($!user.Properties.getProperty("disabled")) $tlang.getString("disabled") #else $tlang.getString("enabled") #end</td>
