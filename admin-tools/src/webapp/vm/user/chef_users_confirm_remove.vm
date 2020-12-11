@@ -16,12 +16,14 @@
 			<tr>
 				<th id="Eid">$tlang.getString("useconrem.useid")</th>
 				<th id="Name">$tlang.getString("useconrem.nam")</th>
+				<th id="School">Escuela</th>
 				<th id="Email">$tlang.getString("useconrem.ema")</th>
 				<th id="Id">$tlang.getString("useconrem.useuid")</th>
 			</tr>
 			<tr>
 				<td headers="Eid"> $formattedText.escapeHtml($user.Eid)</td>
 				<td headers="Name">$formattedText.escapeHtml($user.DisplayName)</td>
+				<td headers="School"></td>
 				<td headers="Email">$formattedText.escapeHtml($user.Email)</td>
 				<td headers="Id">$formattedText.escapeHtml($user.Id)</td>
 			</tr>
