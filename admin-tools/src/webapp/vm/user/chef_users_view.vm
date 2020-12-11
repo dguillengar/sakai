@@ -36,6 +36,10 @@
                             <td>$formattedText.escapeHtml($user.LastName)</td>
                         </tr>
                         <tr>
+                            <td><label>Escuela</label></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td><label>$tlang.getString("usevie.ema")</label></td>
                             <td>$formattedText.escapeHtml($user.Email)</td>
                         </tr>
