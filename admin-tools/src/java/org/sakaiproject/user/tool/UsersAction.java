@@ -94,6 +94,8 @@ import org.sakaiproject.util.api.PasswordFactory;
 
 import com.opencsv.CSVReader;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.tanesha.recaptcha.ReCaptcha;
 import net.tanesha.recaptcha.ReCaptchaFactory;
@@ -177,6 +179,32 @@ public class UsersAction extends PagedResourceActionII
 	/**
 	 * {@inheritDoc}
 	 */
+	
+	public static class  Usuario  implements User {
+		@Getter @Setter private String eid;
+        @Getter @Setter private String email;
+        @Getter @Setter private String firstName;
+        @Getter @Setter private String lastName;
+        @Getter @Setter private String school;
+        @Getter @Setter private String displayName;
+        @Getter @Setter private String password;
+        @Getter @Setter private String type;
+		
+        
+        public Usuario (String eid, String email, String firstName, String lastName, String school, String displayName, String password, String type) {
+    		this.eid 			= eid;
+            this.password 		= password;
+            this.email 			= email;
+            this.firstName 		= firstName;
+            this.lastName 		= lastName;
+            this.school 		= school;
+            this.displayName 	= displayName;
+            this.type 			= type;
+    	}
+	}
+	
+	
+	
 	protected List<User> readResourcesPage(SessionState state, int first, int last)
 	{
 		// search?

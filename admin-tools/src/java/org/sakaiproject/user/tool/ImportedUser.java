@@ -31,7 +31,6 @@ public class ImportedUser {
 	private String eid;
 	private String firstName;
 	private String lastName;
-	private String school;
 	private String email;
 	private String password;
 	private String type;
