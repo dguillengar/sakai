@@ -37,7 +37,7 @@
                         </tr>
                         <tr>
                             <td><label>Escuela</label></td>
-                            <td></td>
+                            <td>$formattedText.escapeHtml($PreferencesEdit.school)</td>
                         </tr>
                         <tr>
                             <td><label>$tlang.getString("usevie.ema")</label></td>

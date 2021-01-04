@@ -26,10 +26,12 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +65,7 @@ import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.entity.api.ResourcePropertiesEdit;
 import org.sakaiproject.event.api.SessionState;
 import org.sakaiproject.event.api.UsageSessionService;
+import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.portal.util.PortalUtils;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
@@ -75,6 +78,9 @@ import org.sakaiproject.user.api.Authentication;
 import org.sakaiproject.user.api.AuthenticationException;
 import org.sakaiproject.user.api.AuthenticationManager;
 import org.sakaiproject.user.api.Evidence;
+import org.sakaiproject.user.api.Preferences;
+import org.sakaiproject.user.api.PreferencesEdit;
+import org.sakaiproject.user.api.PreferencesService;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserAlreadyDefinedException;
 import org.sakaiproject.user.api.UserDirectoryService;
@@ -91,6 +97,8 @@ import org.sakaiproject.util.RequestFilter;
 import org.sakaiproject.util.ResourceLoader;
 import org.sakaiproject.util.StringUtil;
 import org.sakaiproject.util.api.PasswordFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.opencsv.CSVReader;
 
@@ -161,6 +169,7 @@ public class UsersAction extends PagedResourceActionII
 	private ThreadLocalManager threadLocalManager;
 	private UserTimeService userTimeService;
 	private PasswordFactory passwordFactory;
+	private PreferencesService preferencesService;
 	
 	public UsersAction() {
 		super();
@@ -174,36 +183,12 @@ public class UsersAction extends PagedResourceActionII
 		threadLocalManager = ComponentManager.get(ThreadLocalManager.class);
 		userTimeService = (UserTimeService)ComponentManager.get(UserTimeService.class);
 		passwordFactory = ComponentManager.get(PasswordFactory.class);
+		preferencesService = ComponentManager.get(PreferencesService.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	
-	public static class  Usuario  implements User {
-		@Getter @Setter private String eid;
-        @Getter @Setter private String email;
-        @Getter @Setter private String firstName;
-        @Getter @Setter private String lastName;
-        @Getter @Setter private String school;
-        @Getter @Setter private String displayName;
-        @Getter @Setter private String password;
-        @Getter @Setter private String type;
-		
-        
-        public Usuario (String eid, String email, String firstName, String lastName, String school, String displayName, String password, String type) {
-    		this.eid 			= eid;
-            this.password 		= password;
-            this.email 			= email;
-            this.firstName 		= firstName;
-            this.lastName 		= lastName;
-            this.school 		= school;
-            this.displayName 	= displayName;
-            this.type 			= type;
-    	}
-	}
-	
-	
 	
 	protected List<User> readResourcesPage(SessionState state, int first, int last)
 	{
@@ -516,7 +501,8 @@ public class UsersAction extends PagedResourceActionII
 
 		value = (String) state.getAttribute("valueLastName");
 		if (value != null) context.put("valueLastName", value);
-
+		
+		
 		value = (String) state.getAttribute("valueEmail");
 		if (value != null) context.put("valueEmail", value);
 
@@ -570,6 +556,9 @@ public class UsersAction extends PagedResourceActionII
 
 		value = (String) state.getAttribute("valueLastName");
 		if (value != null) context.put("valueLastName", value);
+		
+		value = (String) state.getAttribute("valueSchool");
+		if (value != null) context.put("valueSchool", value);
 
 		value = (String) state.getAttribute("valueEmail");
 		if (value != null) context.put("valueEmail", value);
@@ -637,6 +626,9 @@ public class UsersAction extends PagedResourceActionII
 
 		value = (String) state.getAttribute("valueLastName");
 		if (value != null) context.put("valueLastName", value);
+		
+		value = (String) state.getAttribute("valueSchool");
+		if (value != null) context.put("valueSchool", value);
 
 		value = (String) state.getAttribute("valueEmail");
 		if (value != null) context.put("valueEmail", value);
@@ -1256,6 +1248,8 @@ public class UsersAction extends PagedResourceActionII
 		state.setAttribute("valueFirstName", firstName);
 		String lastName = StringUtils.trimToNull(data.getParameters().getString("last-name"));
 		state.setAttribute("valueLastName", lastName);
+		String school = StringUtils.trimToNull(data.getParameters().getString("school"));
+		state.setAttribute("valueSchool", school);
 		String email = StringUtils.trimToNull(data.getParameters().getString("email"));
 		state.setAttribute("valueEmail", email);
 		String pw = StringUtils.trimToNull(data.getParameters().getString("pw"));
@@ -1477,6 +1471,28 @@ public class UsersAction extends PagedResourceActionII
 				}
 				else
 				{
+						try {
+						
+						Preferences prefs = preferencesService.getPreferences(eid);				        
+						
+						if(null!=prefs.getProperties().getProperty("school")) {
+				        	String pref1 = prefs.getProperties().getProperty("school");
+				        	System.out.print("--------> "+pref1);
+				        }
+				       
+		               PreferencesEdit pe = null;
+		                try {
+		                    pe = preferencesService.edit(eid);
+		                } catch(IdUnusedException idue) {
+		                    pe = preferencesService.add(eid);
+		                }
+		           
+		                pe.getPropertiesEdit().addProperty("school", school);
+		                preferencesService.commit(pe);
+					} catch(Exception e) {
+		                log.error("Failed to setup property",e);
+		            }
+
 					newUser = userDirectoryService.addUser(id, eid, firstName, lastName, email, pw, type, properties);
 
 					if (securityService.isSuperUser()) {

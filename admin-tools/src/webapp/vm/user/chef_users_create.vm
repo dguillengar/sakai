@@ -65,6 +65,15 @@ ${includeLatestJQuery}
 			#end
 
 			<div class="form-group">
+					<label class="control-label col-sm-2" for="school">
+						Escuela
+					</label>
+					<div class="col-sm-3">
+						<input class="form-control sakai-glow" type="text" name="school" id="school" placeholder="Introduzca escuela" #if($user)value="$formattedText.escapeHtml($user.School)"#elseif($valueSchool)value="$formattedText.escapeHtml($valueSchool)"#end/>
+					</div>
+				</div>
+				
+			<div class="form-group">
 				<label class="control-label col-sm-2" for="email">
 					#if ($emailRequired) <span class="red">*</span> #end $tlang.getString("useconrem.ema")
 				</label>

@@ -111,9 +111,9 @@ function removeOptionalAttributeBlock(elem) {
 					</label>
 					<div class="col-sm-3">
 						#if ($service.allowUpdateUserName($user.Id) || !$user)
-							<input class="form-control sakai-glow" type="text" name="last-name" id="last-name" placeholder="Por favor, introduzca escuela" autocomplete="family-name" #if($user)value="$formattedText.escapeHtml($user.LastName)"#elseif($valueLastName)value="$formattedText.escapeHtml($valueLastName)"#end />
+							<input class="form-control sakai-glow" type="text" name="school" id="school" placeholder="Por favor, introduzca escuela" autocomplete="family-name" #if($user)value="$formattedText.escapeHtml($user.School)"#elseif($valueSchool)value="$formattedText.escapeHtml($valueSchool)"#end />
 						#else
-							#if($user)$formattedText.escapeHtml($user.LastName)#elseif($valueLastName)$formattedText.escapeHtml($valueLastName)#end
+							#if($user)$formattedText.escapeHtml($user.School)#elseif($valueSchool)$formattedText.escapeHtml($valueSchool)#end
 						#end
 					</div>
 				</div>
